@@ -12,9 +12,11 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+  "hdbscan>=0.8.40,<1",
   "pytest>=8.4,<9",
   "pytest-asyncio>=1.1,<2",
   "ruff>=0.12,<1",
+  "scikit-learn>=1.7,<2",
 ]
 
 [tool.pytest.ini_options]

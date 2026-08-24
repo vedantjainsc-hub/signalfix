@@ -4,7 +4,7 @@
 
 SignalFix is an AI-assisted decision workflow for customer-operations teams. It combines real public CFPB complaint signals with clearly labeled synthetic internal service data for a fictional bank, then moves an issue through classification, trend detection, evidence review, remediation ranking, human approval, and an auditable decision log.
 
-> Status: Week 1 foundation. The product is being built publicly with small, tested commits for the Tenex Build First showcase.
+> Status: Week 1 foundation complete. The first clustering spike failed its quality gate, so the MVP now uses a controlled taxonomy and deterministic trends.
 
 ## The problem
 

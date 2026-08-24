@@ -1,0 +1,146 @@
+{
+  "source": "CFPB Consumer Complaint Database API",
+  "query": {
+    "product": "Credit card",
+    "has_narrative": true,
+    "date_received_min": "2024-01-01",
+    "date_received_max": "2025-01-01",
+    "issue": "Problem with a purchase shown on your statement",
+    "sample_size": 1000,
+    "sort": "created_date_asc"
+  },
+  "downloaded_records": 1000,
+  "privacy_accepted_records": 1000,
+  "privacy_quarantined_records": 0,
+  "representation": {
+    "method": "TF-IDF 1-2 grams -> 75D TruncatedSVD -> L2 normalize",
+    "features": 7506
+  },
+  "settings": [
+    {
+      "min_cluster_size": 15,
+      "min_samples": 5,
+      "cluster_count": 2,
+      "noise_fraction": 0.885,
+      "silhouette": 0.1109,
+      "weighted_subissue_purity": 0.8087
+    },
+    {
+      "min_cluster_size": 15,
+      "min_samples": 10,
+      "cluster_count": 2,
+      "noise_fraction": 0.96,
+      "silhouette": 0.2527,
+      "weighted_subissue_purity": 0.7
+    },
+    {
+      "min_cluster_size": 25,
+      "min_samples": 5,
+      "cluster_count": 0,
+      "noise_fraction": 1.0,
+      "silhouette": null,
+      "weighted_subissue_purity": null
+    },
+    {
+      "min_cluster_size": 25,
+      "min_samples": 10,
+      "cluster_count": 0,
+      "noise_fraction": 1.0,
+      "silhouette": null,
+      "weighted_subissue_purity": null
+    },
+    {
+      "min_cluster_size": 40,
+      "min_samples": 5,
+      "cluster_count": 0,
+      "noise_fraction": 1.0,
+      "silhouette": null,
+      "weighted_subissue_purity": null
+    },
+    {
+      "min_cluster_size": 40,
+      "min_samples": 10,
+      "cluster_count": 0,
+      "noise_fraction": 1.0,
+      "silhouette": null,
+      "weighted_subissue_purity": null
+    }
+  ],
+  "selected_setting": {
+    "min_cluster_size": 15,
+    "min_samples": 5,
+    "cluster_count": 2,
+    "noise_fraction": 0.885,
+    "silhouette": 0.1109,
+    "weighted_subissue_purity": 0.8087
+  },
+  "gate": {
+    "passed": false,
+    "criteria": {
+      "cluster_count": "3 to 20",
+      "noise_fraction": "<= 0.65",
+      "silhouette": ">= 0.15"
+    },
+    "decision": "Use supervised taxonomy and deterministic trends for the MVP."
+  },
+  "largest_clusters": [
+    {
+      "cluster": 0,
+      "size": 100,
+      "top_terms": [
+        "wells",
+        "fargo",
+        "wells fargo",
+        "card",
+        "bank",
+        "goldman",
+        "sachs",
+        "goldman sachs"
+      ],
+      "top_subissues": [
+        [
+          "Credit card company isn't resolving a dispute about a purchase on your statement",
+          79
+        ],
+        [
+          "Card was charged for something you did not purchase with the card",
+          21
+        ]
+      ],
+      "representative_complaint_ids": [
+        "8089105",
+        "8088740",
+        "8088589"
+      ]
+    },
+    {
+      "cluster": 1,
+      "size": 15,
+      "top_terms": [
+        "american express",
+        "american",
+        "express",
+        "merchant",
+        "express card",
+        "express credit",
+        "card",
+        "email"
+      ],
+      "top_subissues": [
+        [
+          "Credit card company isn't resolving a dispute about a purchase on your statement",
+          14
+        ],
+        [
+          "Card was charged for something you did not purchase with the card",
+          1
+        ]
+      ],
+      "representative_complaint_ids": [
+        "8108419",
+        "8113295",
+        "8181022"
+      ]
+    }
+  ]
+}

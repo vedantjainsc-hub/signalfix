@@ -9,8 +9,8 @@ flowchart TD
     C --> D{Schema and privacy checks pass?}
     D -- No --> E[Quarantine with reason]
     D -- Yes --> F[Complaint classification]
-    F --> G[Embeddings and issue clustering]
-    G --> H[Weekly trend detection]
+    F --> G[Controlled taxonomy and failure modes]
+    G --> H[Deterministic weekly trend detection]
     H --> I[Representative evidence]
     I --> J{Internal corroboration?}
     J -- No --> K[Monitor or request evidence]
@@ -29,7 +29,8 @@ flowchart TD
 - **Next.js web application:** five reviewer-facing screens.
 - **FastAPI service:** typed APIs and workflow orchestration.
 - **PostgreSQL:** normalized complaints, model runs, signals, plans, and audit events.
-- **Model boundary:** structured classification and cluster labeling only.
+- **Model boundary:** structured classification under a controlled taxonomy.
+- **MVP decision:** unsupervised clustering failed the feasibility gate; deterministic taxonomy trends replace it.
 - **Deterministic boundary:** validation, privacy rules, trend calculations, ranking, state transitions, and audit writes.
 - **Demo reliability:** fixed snapshot and precomputed seeded run; live refresh is optional.
 
