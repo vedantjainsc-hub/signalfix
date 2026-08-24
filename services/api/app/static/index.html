@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SignalFix — Complaint to Remediation</title>
+  <style>
+    :root{--ink:#17211b;--muted:#657067;--paper:#f5f4ef;--card:#fff;--green:#145c3d;--mint:#dff1e7;--amber:#a65c13;--line:#d9ddd7;--blue:#174f78;--red:#8c2f2f}
+    *{box-sizing:border-box} body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,sans-serif}
+    header{padding:28px 5vw 20px;border-bottom:1px solid var(--line);background:#fbfbf8;position:sticky;top:0;z-index:2}
+    .brand{display:flex;justify-content:space-between;gap:20px;align-items:center}.brand h1{font-size:23px;margin:0;letter-spacing:-.03em}.brand p{margin:2px 0 0;color:var(--muted)}
+    .badge{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:4px 9px;font-size:12px;font-weight:700;background:#fff}.real{color:var(--blue);background:#eaf4fa}.synthetic{color:#714b00;background:#fff3cd}.status{color:var(--green);background:var(--mint)}
+    main{max-width:1180px;margin:0 auto;padding:30px 24px 80px}.step{font-size:12px;font-weight:800;color:var(--green);letter-spacing:.08em;text-transform:uppercase}.question{font-size:27px;letter-spacing:-.035em;margin:4px 0 16px}.section{margin:0 0 42px}
+    .hero,.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 24px rgba(20,40,28,.04)}.hero{padding:26px}.hero h2{font-size:30px;line-height:1.15;margin:10px 0}.subtle{color:var(--muted)}
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px}.metric{padding:14px;border:1px solid var(--line);border-radius:12px;background:#fafbf8}.metric strong{display:block;font-size:22px}.metric span{font-size:12px;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{padding:20px}.card h3{margin:8px 0;font-size:17px}.quote{font-family:Georgia,serif;font-size:17px;line-height:1.5}.role{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:800}
+    .remediation{display:grid;grid-template-columns:1fr auto;gap:12px}.score{font-size:32px;font-weight:800;color:var(--green)}.chips{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.chip{font-size:12px;background:#f1f3ef;border-radius:7px;padding:4px 7px}.bar{height:8px;background:#e7ebe6;border-radius:8px;overflow:hidden;margin:6px 0 12px}.bar i{display:block;height:100%;background:var(--green)}
+    .plan{display:grid;grid-template-columns:1.3fr .7fr;gap:16px}.list{margin:8px 0;padding-left:19px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}button{border:0;border-radius:9px;padding:11px 16px;font-weight:800;cursor:pointer}button.primary{background:var(--green);color:#fff}button.secondary{background:#e8ebe6;color:var(--ink)}button:disabled{opacity:.55;cursor:not-allowed}
+    .notice{padding:13px 15px;border-left:4px solid var(--amber);background:#fff8eb;margin:10px 0}.audit{border-left:2px solid var(--line);padding-left:18px}.audit-item{margin:0 0 14px}.empty{color:var(--muted);font-style:italic}.error{color:var(--red)}
+    footer{color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:20px}.loading{padding:80px;text-align:center;color:var(--muted)}
+    @media(max-width:800px){.metrics,.grid,.plan{grid-template-columns:1fr}.brand{align-items:flex-start;flex-direction:column}.question{font-size:23px}}
+  </style>
+</head>
+<body>
+<header><div class="brand"><div><h1>SignalFix</h1><p>Turn complaint signals into approved fixes.</p></div><span class="badge">Reviewer-safe seeded demo</span></div></header>
+<main id="app"><div class="loading">Loading the evidence-backed decision workflow…</div></main>
+<script>
+const app=document.querySelector('#app');
+const esc=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function api(path,options){const r=await fetch(path,{headers:{'Content-Type':'application/json'},...options});if(!r.ok)throw new Error((await r.json()).detail||r.statusText);return r.json()}
+function sourceBadge(source){return `<span class="badge ${source==='cfpb'?'real':'synthetic'}">${source==='cfpb'?'REAL PUBLIC CFPB':'SYNTHETIC NORTHSTAR'}</span>`}
+function render(d){
+ const s=d.signal,p=d.plan;
+ app.innerHTML=`
+ <section class="section"><div class="step">1 · Signal</div><h2 class="question">What changed?</h2><div class="hero">
+   <div>${sourceBadge(s.external_source)} ${sourceBadge(s.internal_source)} <span class="badge status">${esc(s.status).toUpperCase()}</span></div>
+   <h2>${esc(s.title)}</h2><p class="subtle">${esc(s.plain_language)}</p>
+   <div class="metrics"><div class="metric"><strong>${s.external_change_ratio}×</strong><span>External observed change</span></div><div class="metric"><strong>${s.internal_change_ratio}×</strong><span>Synthetic internal change</span></div><div class="metric"><strong>${Math.round(s.confidence*100)}%</strong><span>Evidence confidence</span></div><div class="metric"><strong>${esc(s.failure_mode.replaceAll('_',' '))}</strong><span>Candidate failure mode</span></div></div>
+ </div></section>
+ <section class="section"><div class="step">2 · Evidence</div><h2 class="question">Why should I believe this?</h2><div class="grid">${d.evidence.map(e=>`<article class="card"><div class="role">${esc(e.role)} evidence</div><div>${sourceBadge(e.source)}</div><p class="quote">“${esc(e.excerpt)}”</p><small class="subtle">Complaint ${esc(e.complaint_id)}</small></article>`).join('')}</div></section>
+ <section class="section"><div class="step">3 · Options</div><h2 class="question">What could we do?</h2><div class="grid">${d.remediations.map((r,i)=>`<article class="card remediation"><div><div class="role">Option ${i+1} · ${esc(r.effort_band)} effort</div><h3>${esc(r.title)}</h3><p class="subtle">${esc(r.mechanism)}</p><div class="chips"><span class="chip">Owner: ${esc(r.owner_role)}</span><span class="chip">${r.lead_time_weeks[0]}–${r.lead_time_weeks[1]} weeks</span></div><div class="bar"><i style="width:${r.score}%"></i></div><small class="subtle">Transparent weighted score; assumptions are synthetic and reviewable.</small></div><div class="score">${r.score.toFixed(1)}</div></article>`).join('')}</div></section>
+ <section class="section"><div class="step">4 · Human decision</div><h2 class="question">What exactly are we approving?</h2><div class="plan"><article class="card"><h3>Bounded pilot: ${esc(d.remediations.find(r=>r.id===p.remediation_id)?.title||p.remediation_id)}</h3><ul class="list"><li><b>Owner:</b> ${esc(p.owner)}</li><li><b>Approver:</b> ${esc(p.approver)}</li><li><b>Target:</b> ${esc(p.target_kpi)} from ${p.baseline}% to ${p.target}%</li><li><b>Stop condition:</b> ${esc(p.stop_condition)}</li></ul><div class="actions"><button class="primary" id="approve" ${p.status!=='ready_for_review'?'disabled':''}>Approve bounded pilot</button><button class="secondary" id="reset">Reset demo</button></div><p id="message" class="subtle"></p></article><article class="card"><div class="role">Current state</div><h3>${esc(p.status.replaceAll('_',' '))}</h3><p>Version ${p.version}. No customer-facing change happens automatically.</p></article></div></section>
+ <section class="section"><div class="step">5 · Accountability</div><h2 class="question">What did we decide?</h2><div class="card audit">${d.audit.length?d.audit.map(a=>`<div class="audit-item"><b>${esc(a.previous_status)} → ${esc(a.new_status)}</b><br><span class="subtle">${esc(a.actor)} · ${esc(a.reason)}</span></div>`).join(''):'<p class="empty">No decision yet. Approval will create an audit event.</p>'}</div></section>
+ <section class="section"><div class="step">Limits</div><h2 class="question">What can this prototype not prove?</h2>${d.limitations.map(x=>`<div class="notice">${esc(x)}</div>`).join('')}</section>
+ <footer>SignalFix is decision support. Real public and fictional internal data remain visibly separate.</footer>`;
+ document.querySelector('#approve').onclick=approve;document.querySelector('#reset').onclick=reset;
+}
+async function load(){try{render(await api('/api/v1/demo'))}catch(e){app.innerHTML=`<p class="error">${esc(e.message)}</p>`}}
+async function approve(){const b=document.querySelector('#approve');b.disabled=true;try{await api('/api/v1/demo/plans/northstar-dispute-pilot/approve',{method:'POST',body:JSON.stringify({actor:'demo-operations-director',reason:'Evidence, target, and stop condition reviewed'})});await load()}catch(e){document.querySelector('#message').textContent=e.message;b.disabled=false}}
+async function reset(){await api('/api/v1/demo/reset',{method:'POST'});await load()}
+load();
+</script>
+</body></html>

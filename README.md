@@ -4,7 +4,7 @@
 
 SignalFix is an AI-assisted decision workflow for customer-operations teams. It combines real public CFPB complaint signals with clearly labeled synthetic internal service data for a fictional bank, then moves an issue through classification, trend detection, evidence review, remediation ranking, human approval, and an auditable decision log.
 
-> Status: Week 1 foundation complete. The first clustering spike failed its quality gate, so the MVP now uses a controlled taxonomy and deterministic trends.
+> Status: A functional seeded reviewer demo now runs locally: signal, evidence, remediation ranking, human approval, and audit. Unsupervised clustering failed its quality gate, so the MVP uses a controlled taxonomy and deterministic trends.
 
 ## The problem
 
@@ -54,6 +54,23 @@ evals/         Reproducible model and workflow evaluations
 4. Real and synthetic data remain visibly separate.
 5. Every consequential mutation creates an audit event.
 6. A simpler supervised fallback beats incoherent clustering.
+
+## Run the functional demo locally
+
+```bash
+cd services/api
+uv sync --group dev
+uv run uvicorn app.main:app --reload
+```
+
+Open http://127.0.0.1:8000. The interface walks through five plain-language questions and supports a real approval mutation plus audit event. API documentation is available at http://127.0.0.1:8000/docs.
+
+Run verification:
+
+```bash
+uv run pytest -q
+uv run ruff check .
+```
 
 ## Official data sources
 
