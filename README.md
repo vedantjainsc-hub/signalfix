@@ -42,7 +42,7 @@ Ingest → Validate/Privacy Check → Classify → Cluster/Detect
 docs/          Product, data, architecture, evaluation, and limitations
 services/api/  Python/FastAPI ingestion and decision pipeline
 apps/web/      Next.js reviewer-facing product
- data/         Small test fixtures and documented seed inputs
+data/          Small test fixtures and documented seed inputs
 evals/         Reproducible model and workflow evaluations
 ```
 
